@@ -1,21 +1,22 @@
-const db = require('../../database/models');
-const sequelize = db.sequelize;
+//const db = require('../../database/models');
+const { getAllActors } = require('../../services/actorsServices');
+//const sequelize = db.sequelize;
 
 
 const actorsController = {
     'list': async (req, res) => {
 
         try {
-            const actors = await db.Actor.findAll();
+            const /*actors  */ {count:total , rows : actors} = await getAllActors(req);
 
             return res.status(200).json({
                 ok : true,
                 meta : {
                     status: 200,
-                    total: actors.length,
+                    total: total,/*  */
                     url : "/api/actors"
                 },
-                data : actors /* puede ir actors directamente */
+                actors /* puede ir actors directamente */
             })
         } catch (error) {
             console.log(error);
