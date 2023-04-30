@@ -3,7 +3,7 @@ const db = require('../../database/models');
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
 const moment = require('moment');
-const { getAllMovies, getOneMovie, getNewestMovies } = require('../../services/moviesServices');
+const { getAllMovies, getOneMovie, getNewestMovies, getRecomendedMovies } = require('../../services/moviesServices');
 
 
 //Aqui tienen otra forma de llamar a cada uno de los modelos
@@ -33,10 +33,6 @@ const moviesController = {
                 msg: error.message
             })
         }
-
-        /* .then(movies => {
-            res.render('moviesList.ejs', {movies})
-        }) */
     },
     'detail': async (req, res) => {
 
@@ -61,11 +57,6 @@ const moviesController = {
                 msg: error.message
             })
         }
-
-
-        /* .then(movie => {
-            res.render('moviesDetail.ejs', {movie});
-        }); */
     },
     'new': async (req, res) => {
 
@@ -86,33 +77,20 @@ const moviesController = {
                 msg: error.message
             })
         }
-
-
-        /* .then(movies => {
-            res.render('newestMovies', {movies});
-        }); */
     },
     'recomended': async (req, res) => {
 
         try {
 
-            const moviesRecommended = await db.Movie.findAll({
-                include: ['genre'],
-                where: {
-                    rating: { [db.Sequelize.Op.gte]: 8 }
-                },
-                order: [
-                    ['rating', 'DESC']
-                ]
-            });
+            const {count:total,rows:moviesRecommended} = await getRecomendedMovies(req)
             return res.status(200).json({
                 ok: true,
                 meta: {
                     status: 200,
-                    total: moviesRecommended.length,
+                    total: total,
                     url: "/api/recommended"
                 },
-                data: moviesRecommended
+                moviesRecommended
             })
 
         } catch (error) {
@@ -121,11 +99,6 @@ const moviesController = {
                 msg: error.message
             })
         }
-
-
-        /* .then(movies => {
-            res.render('recommendedMovies.ejs', {movies});
-        }); */
     },
     //Aqui dispongo las rutas para trabajar con el CRUD
     /* add: function (req, res) {
