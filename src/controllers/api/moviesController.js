@@ -3,6 +3,7 @@ const db = require('../../database/models');
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
 const moment = require('moment');
+const { getAllMovies } = require('../../services/moviesServices');
 
 
 //Aqui tienen otra forma de llamar a cada uno de los modelos
@@ -15,18 +16,16 @@ const moviesController = {
     'list': async (req, res) => {
 
         try {
-            const movies = await db.Movie.findAll({
-            include: ['genre']
-        })
+            const {count:total,rows:movies} = await getAllMovies(req);
 
         return res.status(200).json({
             ok : true,
             meta : {
                 status: 200,
-                total: movies.length,
+                total: total,
                 url : "/api/movies"
             },
-            data : movies
+            movies
         })
         } catch (error) {
             console.log(error);
