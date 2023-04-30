@@ -38,11 +38,26 @@ module.exports = {
         }
     },
 
-    getOneGenre: async (id) => {
+    getOneMovie: async (req, id) => {
 
         try {
-            const genre = await db.Genre.findByPk(id);
-            return genre
+            const movie = await db.Movie.findByPk(id,
+                {
+                    include: [{
+                        association: "genre",
+                        attributes: ["name"]
+                    },
+                    {
+                        //incluyo los actores de la pelicula, solo muestro nombre y apellido (quise ver si podia concatenar el nombre y apellido pero no supe como), sin los atributos de la tabla pivot
+                        association: "actors",
+                        attributes: ["first_name", "last_name"],
+                        through: { attributes: [] }
+                    }],
+                    attributes: {
+                        exclude: ["genre_id", "created_at", "updated_at"],
+                    }
+                });
+            return movie
         } catch (error) {
             throw {
                 status: 500,
