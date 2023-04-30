@@ -1,7 +1,7 @@
 const db = require('../../database/models');
 const createResponseError = require('../../helpers/createResponseError');
 const { getAllGenres, getOneGenre, createGenre } = require('../../services/genresServices');
-const {validationRresult} = require('express-validator')
+const {validationResult} = require('express-validator')
 const sequelize = db.sequelize;
 
 
@@ -9,16 +9,16 @@ const genresController = {
     'list': async (req, res) => {
 
         try {
-            const genres = await getAllGenres();
+            const {count:total,rows:genres} = await getAllGenres(req);
 
             return res.status(200).json({
                 ok : true,
                 meta : {
                     status: 200,
-                    total: genres.length,
+                    total: total,
                     url : "/api/genres"
                 },
-                data : genres /* puede ir genres directamente */
+                genres /* puede ir genres directamente */
             })
         } catch (error) {
             console.log(error);
@@ -54,7 +54,7 @@ const genresController = {
         
         try {
 
-            const errors = validationRresult(req);
+            const errors = validationResult(req);
 
             if (!errors.isEmpty()) throw{
                 status : 400,
