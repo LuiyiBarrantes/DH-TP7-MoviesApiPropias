@@ -13,7 +13,7 @@ module.exports = {
                       },
                     {
                       association: "actors",
-                       attributes:  ["first_name","last_name","rating","favorite_movie_id"],
+                       attributes:  ["first_name","last_name","rating",],
                       through: { attributes: [] }
                       /**/
                     },
