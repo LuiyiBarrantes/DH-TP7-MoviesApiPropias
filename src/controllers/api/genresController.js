@@ -32,7 +32,7 @@ const genresController = {
 
             const {id} = req.params;
 
-            const genre= await getOneGenre(id);
+            const genre= await getOneGenre(req,id);
 
             return res.status(200).json({
                 ok : true,

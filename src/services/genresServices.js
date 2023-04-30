@@ -28,10 +28,20 @@ module.exports = {
         }
     },
 
-    getOneGenre: async (id) => {
+    getOneGenre: async (req,id) => {
 
         try {
-            const genre = await db.Genre.findByPk(id);
+            const genre = await db.Genre.findByPk(id,{
+                include: [
+                    {
+                        association: "movies",
+                        attributes: ["title"],
+                    },
+                ],
+                attributes: {
+                    exclude: ["created_at", "updated_at"],
+                },
+            });
             return genre
         } catch (error) {
             throw {
