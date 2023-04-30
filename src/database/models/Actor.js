@@ -37,6 +37,10 @@ module.exports = (sequelize, dataTypes) => {
             foreignKey: 'actor_id',
             otherKey: 'movie_id',
             timestamps: false
+        });
+        Actor.belongsTo(models.Movie, { // models.Genre -> Genres es el valor de alias en genres.js
+            as: "favorite_movie",
+            foreignKey: "favorite_movie_id"
         })
     }
 
