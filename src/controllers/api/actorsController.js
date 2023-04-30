@@ -1,5 +1,5 @@
 //const db = require('../../database/models');
-const { getAllActors } = require('../../services/actorsServices');
+const { getAllActors, getOneActor } = require('../../services/actorsServices');
 //const sequelize = db.sequelize;
 
 
@@ -32,7 +32,7 @@ const actorsController = {
 
             const {id} = req.params;
 
-            const actor= await db.actor.findByPk(id);
+            const actor= await getOneActor(req,id);
 
             return res.status(200).json({
                 ok : true,
@@ -41,7 +41,7 @@ const actorsController = {
                     total: 1,
                     url : `/api/actors/${id}`
                 },
-                data : actor
+                actor
             })
         } catch (error) {
             console.log(error);
