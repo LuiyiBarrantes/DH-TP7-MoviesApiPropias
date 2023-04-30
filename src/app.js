@@ -13,6 +13,8 @@ const genresRoutes = require('./routes/genresRoutes');
 
 //Aquí pueden colocar las rutas de las APIs
 const genresApiRoutes = require('./routes/api/genresRoutes')
+const actorsApiRoutes = require('./routes/api/actorsRoutes')
+const moviesApiRoutes = require('./routes/api/moviesRoutes')
 //const moviesApiRoutes = require('./routes/api/moviesRoutes');
 const createResponseError = require('./helpers/createResponseError');
 
@@ -35,7 +37,8 @@ app.use('/', indexRouter);
 app.use(moviesRoutes);
 app.use(genresRoutes);
 app.use('/api',genresApiRoutes);
-//app.use('/api',moviesApiRoutes);
+app.use('/api',moviesApiRoutes);
+app.use('/api',actorsApiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -48,4 +51,4 @@ app.use(function (req, res, next) {
   });
 
 //Activando el servidor desde express
-app.listen('3001', () => console.log('Servidor corriendo en el puerto 3001'));
+app.listen('3001', () => console.log('Servidor corriendo en el puerto 3001 http://localhost:3001'));
