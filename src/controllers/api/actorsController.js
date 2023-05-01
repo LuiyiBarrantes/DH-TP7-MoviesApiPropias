@@ -20,9 +20,7 @@ const actorsController = {
             })
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }
         
     },
@@ -45,9 +43,7 @@ const actorsController = {
             })
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }     
     },
 
@@ -68,9 +64,7 @@ const actorsController = {
 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }
     },
 
