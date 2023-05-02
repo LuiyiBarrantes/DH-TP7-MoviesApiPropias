@@ -153,5 +153,39 @@ module.exports = {
         }
 
     },
+    updateMovie: async (data, id) => {
 
+        try {
+            const updatedMovie = await db.Movie.update({
+                ...data
+            }, {
+                where: { id }
+            });
+            return updatedMovie
+        } catch (error) {
+            throw {
+                status: 500,
+                message: error.message
+            }
+        }
+
+    },
+    deleteMovie: async (id) => {
+
+        try {
+            const deletedMovie = await db.Movie.destroy({ 
+                where: { id: id 
+                }, 
+                // force: true es para asegurar que se ejecute la acción
+                force: true 
+            });
+            return deletedMovie
+        } catch (error) {
+            throw {
+                status: 500,
+                message: error.message
+            }
+        }
+
+    },
 }
