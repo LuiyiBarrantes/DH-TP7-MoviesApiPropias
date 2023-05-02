@@ -141,7 +141,7 @@ module.exports = {
     createMovie: async (data) => {
 
         try {
-            const newMovie = db.Movie.create({
+            const newMovie = await db.Movie.create({
                 ...data
             });
             return newMovie

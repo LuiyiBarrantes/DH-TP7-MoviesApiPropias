@@ -3,7 +3,9 @@ const db = require('../../database/models');
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
 const moment = require('moment');
-const { getAllMovies, getOneMovie, getNewestMovies, getRecomendedMovies } = require('../../services/moviesServices');
+const { getAllMovies, getOneMovie, getNewestMovies, getRecomendedMovies, createMovie } = require('../../services/moviesServices');
+const createResponseError = require('../../helpers/createResponseError');
+const { validationResult } = require('express-validator');
 
 
 //Aqui tienen otra forma de llamar a cada uno de los modelos
@@ -29,9 +31,7 @@ const moviesController = {
             })
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }
     },
     'detail': async (req, res) => {
@@ -53,9 +53,7 @@ const moviesController = {
             })
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }
     },
     'new': async (req, res) => {
@@ -73,9 +71,7 @@ const moviesController = {
             })
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }
     },
     'recomended': async (req, res) => {
@@ -95,9 +91,7 @@ const moviesController = {
 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({
-                msg: error.message
-            })
+            return createResponseError(res,error)
         }
     },
     //Aqui dispongo las rutas para trabajar con el CRUD
@@ -111,7 +105,32 @@ const moviesController = {
             return res.render(path.resolve(__dirname, '..', 'views',  'moviesAdd'), {allGenres,allActors})})
         .catch(error => res.send(error))
     }, */
-    create: function (req, res) {
+    create: async (req, res) => {
+
+        try {
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) throw {
+                status: 400,
+                message: errors.mapped()
+            }
+            /* {id} const {} = req.body */
+            const movie = await createMovie(req.body)
+            //const movie = getOneMovie(req,id)
+            return res.status(200).json({
+                ok: true,
+                meta: {
+                    status: 200,
+                    total: 1,
+                    message: "Pelicula creada exitosamente",
+                    url: "/api/movies/create"
+                },
+                movie
+            })
+        } catch (error) {
+            console.log(error);
+            return createResponseError(res,error)
+        }/* 
         Movies
             .create(
                 {
@@ -126,7 +145,7 @@ const moviesController = {
             .then(() => {
                 return res.redirect('/movies')
             })
-            .catch(error => res.send(error))
+            .catch(error => res.send(error)) */
     },
     /* edit: function(req,res) {
         let movieId = req.params.id;
