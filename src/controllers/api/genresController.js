@@ -1,6 +1,6 @@
 const db = require('../../database/models');
 const createResponseError = require('../../helpers/createResponseError');
-const { getAllGenres, getOneGenre, createGenre } = require('../../services/genresServices');
+const { getAllGenres, getOneGenre, createGenre, updateGenre } = require('../../services/genresServices');
 const {validationResult} = require('express-validator')
 const sequelize = db.sequelize;
 
@@ -50,7 +50,6 @@ const genresController = {
     },
 
     store : async (req, res) => {
-
         
         try {
 
@@ -68,6 +67,7 @@ const genresController = {
                 meta :{
                     status: 200,
                     total: 1,
+                    message: "Genero creado exitosamente",
                     url : `/api/genres/${newGenre.id}`
                 },
                 data : newGenre
@@ -81,23 +81,24 @@ const genresController = {
     update : async (req, res) =>{
         try {
 
-            const errors = validationRresult(req);
+            const errors = validationResult(req);
 
             if (!errors.isEmpty()) throw{
                 status : 400,
                 message : errors.mapped()
             }
-
-            const newGenre = await updateGenre(req.body)
-
+            let {id} = req.params;
+            const genre = await updateGenre(req.body,id)
+            const updatedGenre = await getOneGenre(req,id)
             return res.status(200).json({
                 ok : true,
                 meta :{
                     status: 200,
                     total: 1,
+                    message: "Genero actualizado exitosamente",
                     url : `/api/genres/${newGenre.id}`
                 },
-                data : genre
+                updatedGenre
             })
         } catch (error) {
             return createResponseError(res,error)

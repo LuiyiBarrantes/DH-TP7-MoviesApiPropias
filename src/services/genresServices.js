@@ -66,5 +66,22 @@ module.exports = {
         }
 
     },
+    updateGenre: async (data,id) => {
+
+        try {
+            const updatedGenre = await db.Genre.update({
+                ...data
+            },{
+                where:{id}
+            });
+            return updatedGenre
+        } catch (error) {
+            throw {
+                status: 500,
+                message: error.message
+            }
+        }
+
+    },
 
 }
