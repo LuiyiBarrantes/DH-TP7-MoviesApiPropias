@@ -173,11 +173,12 @@ module.exports = {
     deleteMovie: async (id) => {
 
         try {
-            const deletedMovie = await db.Movie.destroy({ 
-                where: { id: id 
-                }, 
+            const deletedMovie = await db.Movie.destroy({
+                where: {
+                    id: id
+                },
                 // force: true es para asegurar que se ejecute la acción
-                force: true 
+                force: true
             });
             return deletedMovie
         } catch (error) {

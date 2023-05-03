@@ -71,7 +71,7 @@ module.exports = {
 
         try {
             const recomendedActor = await db.Actor.findAndCountAll({
-                /**/ include: [
+                include: [
                     //incluyo la pelicula favorita del actor, solo muestro el titulo
                     {
                         association: "favorite_movie",
@@ -88,7 +88,7 @@ module.exports = {
                 attributes: {
                     //excluyo los atributos que no necesito mostrar del actor
                     exclude: ["favorite_movie_id", "created_at", "updated_at"],
-                }, 
+                },
                 where: {
                     rating: { [db.Sequelize.Op.gte]: 8 }
                 },
@@ -120,13 +120,13 @@ module.exports = {
         }
 
     },
-    updateActor: async (data,id) => {
+    updateActor: async (data, id) => {
 
         try {
             const updatedActor = await db.Actor.update({
                 ...data
-            },{
-                where:{id}
+            }, {
+                where: { id }
             });
             return updatedActor
         } catch (error) {
@@ -140,11 +140,12 @@ module.exports = {
     deleteActor: async (id) => {
 
         try {
-            const deletedActor = await db.Actor.destroy({ 
-                where: { id: id 
-                }, 
+            const deletedActor = await db.Actor.destroy({
+                where: {
+                    id: id
+                },
                 // force: true es para asegurar que se ejecute la acción
-                force: true 
+                force: true
             });
             return deletedActor
         } catch (error) {

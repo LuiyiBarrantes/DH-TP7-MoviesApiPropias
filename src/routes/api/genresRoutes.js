@@ -6,7 +6,7 @@ const genresController = require('../../controllers/api/genresController');
 router.get('/genres', genresController.list);
 router.get('/genres/:id', genresController.detail);
 router.post('/genres', genresController.store);
-router.post('/genres/:id', genresController.update);
+router.put('/genres/:id', genresController.update);
 router.delete('/genres/:id', genresController.destroy);
 
 
