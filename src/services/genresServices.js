@@ -83,5 +83,23 @@ module.exports = {
         }
 
     },
+    deleteGenre: async (id) => {
+
+        try {
+            const deletedGenre = await db.Genre.destroy({ 
+                where: { id: id 
+                }, 
+                // force: true es para asegurar que se ejecute la acción
+                force: true 
+            });
+            return deletedGenre
+        } catch (error) {
+            throw {
+                status: 500,
+                message: error.message
+            }
+        }
+
+    },
 
 }

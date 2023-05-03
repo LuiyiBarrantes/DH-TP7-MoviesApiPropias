@@ -1,6 +1,6 @@
 const db = require('../../database/models');
 const createResponseError = require('../../helpers/createResponseError');
-const { getAllGenres, getOneGenre, createGenre, updateGenre } = require('../../services/genresServices');
+const { getAllGenres, getOneGenre, createGenre, updateGenre, deleteGenre } = require('../../services/genresServices');
 const {validationResult} = require('express-validator')
 const sequelize = db.sequelize;
 
@@ -106,7 +106,23 @@ const genresController = {
     },
 
     destroy : async (req, res) =>{
-
+        try {
+            let {id} = req.params;
+            const genre = deleteGenre(id)
+            return res.status(200).json({
+                ok: true,
+                meta: {
+                    status: 200,
+                    total: 1,
+                    message: "Genre eliminado exitosamente",
+                    url: "/api/genres"
+                },
+                genre/* , */                
+            })
+        } catch (error) {
+            console.log(error);
+            return createResponseError(res,error)
+        }      
     }
 
 }
