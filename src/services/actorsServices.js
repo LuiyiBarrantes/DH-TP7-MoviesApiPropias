@@ -108,10 +108,45 @@ module.exports = {
     createActor: async (data) => {
 
         try {
-            const newGenre = db.Genre.create({
+            const newActor = db.Actor.create({
                 ...data
             });
-            return newGenre
+            return newActor
+        } catch (error) {
+            throw {
+                status: 500,
+                message: error.message
+            }
+        }
+
+    },
+    updateActor: async (data,id) => {
+
+        try {
+            const updatedActor = await db.Actor.update({
+                ...data
+            },{
+                where:{id}
+            });
+            return updatedActor
+        } catch (error) {
+            throw {
+                status: 500,
+                message: error.message
+            }
+        }
+
+    },
+    deleteActor: async (id) => {
+
+        try {
+            const deletedActor = await db.Actor.destroy({ 
+                where: { id: id 
+                }, 
+                // force: true es para asegurar que se ejecute la acción
+                force: true 
+            });
+            return deletedActor
         } catch (error) {
             throw {
                 status: 500,
