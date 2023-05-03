@@ -1,7 +1,7 @@
 //const db = require('../../database/models');
 const { validationResult } = require('express-validator');
 const createResponseError = require('../../helpers/createResponseError');
-const { getAllActors, getOneActor, getRecomendedActor, createActor, updateActor } = require('../../services/actorsServices');
+const { getAllActors, getOneActor, getRecomendedActor, createActor, updateActor, deleteActor } = require('../../services/actorsServices');
 //const sequelize = db.sequelize;
 
 
@@ -116,7 +116,7 @@ const actorsController = {
                 status: 200,
                 total: 1,
                 message: "Actor actualizado exitosamente",
-                url: "/api/movies"
+                url: "/api/actors"
             },
             /* movie, */
             updatedActor
@@ -128,7 +128,23 @@ const actorsController = {
     },
 
     destroy : async (req, res) =>{
-
+        try {
+            let {id} = req.params;
+            const actor = deleteActor(id)
+            return res.status(200).json({
+                ok: true,
+                meta: {
+                    status: 200,
+                    total: 1,
+                    message: "Actor eliminado exitosamente",
+                    url: "/api/actors"
+                },
+                actor/* , */                
+            })
+        } catch (error) {
+            console.log(error);
+            return createResponseError(res,error)
+        }      
     }
 
 }
